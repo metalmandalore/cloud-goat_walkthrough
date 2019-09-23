@@ -49,33 +49,33 @@ The github documentation states to use pip3 install -r requirements.txt, but I h
 Now that the installation of the cloudgoat python module is complete, move on to create/remove the scenarios in order.
 
 ## iam_privesc_by_rollback
-1. Create scenario
-`./cloudgoat.py create iam_privesc_by_rollback`
+1. Create scenario  
+`./cloudgoat.py create iam_privesc_by_rollback --profile goat`  
 2. 
 
 ## iam_privesc_by_attachment
-1. Create scenario
-`./cloudgoat.py create iam_privesc_by_attachment`
+1. Create scenario  
+`./cloudgoat.py create iam_privesc_by_attachment --profile goat`  
 
 
 ## cloud_breach_s3
-1. Create scenario
-`./cloudgoat.py create cloud_breach_s3`
+1. Create scenario  
+`./cloudgoat.py create cloud_breach_s3 --profile goat`  
 
 
 ## ec2_ssrf
-1. Create scenario
-`./cloudgoat.py create ec2_ssrf`
+1. Create scenario  
+`./cloudgoat.py create ec2_ssrf --profile goat`  
 
 
 ## rce_web_app
-1. Create scenario
-`./cloudgoat.py create rce_web_app`
+1. Create scenario   
+`./cloudgoat.py create rce_web_app --profile goat`   
 
 
 ## codebuild_secrets
-1. Create scenario
-`./cloudgoat.py create codebuild_secrets`
+1. Create scenario  
+`./cloudgoat.py create codebuild_secrets --profile goat`  
 
 ## Removal
 ### iam_privesc_by_rollback
