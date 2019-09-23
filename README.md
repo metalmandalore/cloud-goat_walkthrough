@@ -11,26 +11,26 @@ Github's Official CloudGoat link can be found here:
 ## Installation
 Cloud goat can be installed via Docker, but this guide only covers the AWS installation of CloudGoat.  
 This requires a free tier Amazon AWS account. RhinoLabs states that this training may cost $1-3 per day.  
-While I cannot guarantee this to be free, I have yet to accrue any costs while using CloudGoat.
-
-Create an aws profile to use for cloudgoat, this example uses the profile **goat**.
-To install CloudGoat, several steps are required as pre-requisites.  
-Installation for Windows systems is not included at this time, but detailed installation steps will be included for both Linux and OSX. Leave me feedback requesting this, and I'll get it working on Windows for you.
-
+While I cannot guarantee this to be free, I have yet to accrue any costs while using CloudGoat.  
+  
+Create an aws profile to use for cloudgoat, this example uses the profile **goat**.  
+To install CloudGoat, several steps are required as pre-requisites.    
+Installation for Windows systems is not included at this time, but detailed installation steps will be included for both Linux and OSX. Leave me feedback requesting this, and I'll get it working on Windows for you.  
+  
 ### Linux
-1. Verify python3.6+ is installed
+1. Verify python3.6+ is installed  
 
 ### OSX
-MacOS High Sierra and Mojave both come with Python3.6+
-1. Verify python3.6+ is installed from Terminal 
+MacOS High Sierra and Mojave both come with Python3.6+   
+1. Verify python3.6+ is installed from Terminal  
 `python3` will launch the installed version of python 3 which it will list on the 1st line  
-CTRL+D to quit
-2. Install terraform  
-`brew install terraform`
-3. Verify terraform installation  
-`terraform`  
-4. Install AWS CLI
-`brew install awscli`
+CTRL+D to quit   
+2. Install terraform   
+`brew install terraform`  
+3. Verify terraform installation   
+`terraform`   
+4. Install AWS CLI  
+`brew install awscli`   
 5. Change the directory to a good location for CloudGoat *~/* seems to work best for a least priv option  
 6. Install CloudGoat  
 ```bash
@@ -38,20 +38,31 @@ git clone https://github.com/RhinoSecurityLabs/cloudgoat.git
 cd cloudgoat
 sudo chmod u+x cloudgoat.py
 sudo chmod 777 cloudgoat.py
-```
-The github documentation states to use pip3 install -r requirements.txt, but I have found that isn't actually necessary.
-7. Create a profile
-`./cloudgoat.py config profile`
-    * Default profile name? __y__  
-    * Default AWS profile: __goat__
-8. Configure your system's IP to be on the whitelist
+```   
+The github documentation states to use pip3 install -r requirements.txt, but I have found that isn't actually necessary.  
+7. Create a profile   
+`./cloudgoat.py config profile`   
+    * Default profile name? __y__     
+    * Default AWS profile: __goat__   
+8. Configure your system's IP to be on the whitelist   
 `./cloudgoat.py config whitelist --auto`   
-Now that the installation of the cloudgoat python module is complete, move on to create/remove the scenarios in order.
+Now that the installation of the cloudgoat python module is complete, move on to create/remove the scenarios in order.  
+9. Create the **goat** profile for AWS CLI
+`aws configure --profile goat`   
+    * AWS Access Key ID: __goat account aws_access_key_id__   
+    * AWS Secret Access Key: __goat aws_secret_access_key__   
+    * Default region name: __us-east-1__   
+    * Default output format: __can be left blank__    
+    
 
 ## iam_privesc_by_rollback
 1. Create scenario  
 `./cloudgoat.py create iam_privesc_by_rollback --profile goat`  
-2. 
+2. Note all Outputs information  
+e.g.
+   * cloudgoat_output_aws_account_id = 
+   * cloudgoat_output_raynor_access_key_id = 
+   * cloudgoat_output_raynor_secret_key = 
 
 ## iam_privesc_by_attachment
 1. Create scenario  
