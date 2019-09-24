@@ -59,10 +59,24 @@ Now that the installation of the cloudgoat python module is complete, move on to
 1. Create scenario  
 `./cloudgoat.py create iam_privesc_by_rollback --profile goat`  
 2. Note all Outputs information  
-e.g.
-   * cloudgoat_output_aws_account_id = 
-   * cloudgoat_output_raynor_access_key_id = 
-   * cloudgoat_output_raynor_secret_key = 
+e.g.  
+   * cloudgoat_output_aws_account_id =  
+   * cloudgoat_output_raynor_access_key_id =  
+   * cloudgoat_output_raynor_secret_key =  
+3. Create the profile for Raynor, the user you need to privesc as  
+`aws configure --profile raynor`  
+    * AWS Access Key ID: __raynor account aws_access_key_id__   
+    * AWS Secret Access Key: __raynor aws_secret_access_key__   
+    * Default region name: __us-east-1__   
+    * Default output format: __leave blank__ 
+4. List the user policies for Raynor
+5. List the versions for the discovered user policy
+6. Get information on the policy versions
+Note the policy version which contains __Allowed Actions:*__ and __Resource:*__  
+This demonstrates administrative privileges by allowed all actions to be performed on all resources
+7. Set the policy version to the one containing admin privileges 
+8. Verify the attached policy 
+9. Verify account authorization details are administrative
 
 ## iam_privesc_by_attachment
 1. Create scenario  
