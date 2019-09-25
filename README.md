@@ -97,7 +97,7 @@ This demonstrates administrative privileges by allowed all actions to be perform
 aws iam set-default-policy-version --policy-arn arn:aws:iam:666999666999:policy/cg-raynor-policy --version-id v3 --profile Raynor  
 10. Verify account authorization details are administrative
 `aws iam get-account-authorization-details --profile raynor`
-This list will be a bit accessive as the account now has all possible privileges 
+This list will be a bit accessive as the account now has all possible privileges   
 **Goal Achieved**
 
 ### Remove iam_privesc_by_rollback
@@ -174,10 +174,14 @@ Now that the new instance contains full admin access the targe instance can be t
 8. Ensure the checkbox for the mighty key pair is checked and click Delete
 9. Remove the scenario with cloudgoat
 `cloudgoat.py destroy iam_privesc_by_attachment --profile goat`
+10. Remove the aws cli credentials for Kerrigan 
 
 ## cloud_breach_s3
 1. Create scenario  
 `./cloudgoat.py create cloud_breach_s3 --profile goat`  
+
+
+### Remove cloud_breach_s3
 
 
 ## ec2_ssrf
