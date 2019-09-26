@@ -53,20 +53,20 @@ cd cloudgoat
 sudo chmod u+x cloudgoat.py
 sudo chmod 777 cloudgoat.py
 ```   
-The github documentation states to use pip3 install -r requirements.txt, but I have found that isn't actually necessary.  
+The github documentation states to use pip3 install -r requirements.txt, but I have found that isn't actually necessary for cloudgoat  
 2. Create a profile   
-`./cloudgoat.py config profile`   
-    * Default profile name? __y__     
-    * Default AWS profile: __goat__   
+`./cloudgoat.py config profile`    
+      * Default profile name? __y__     
+      * Default AWS profile: __goat__   
 3. Configure your system's IP to be on the whitelist   
 `./cloudgoat.py config whitelist --auto`   
 Now that the installation of the cloudgoat python module is complete, move on to create/remove the scenarios in order.  
-4. Create the **goat** profile for AWS CLI
+4. Create the **goat** profile for AWS CLI   
 `aws configure --profile goat`   
-    * AWS Access Key ID: __goat account aws_access_key_id__   
-    * AWS Secret Access Key: __goat aws_secret_access_key__   
-    * Default region name: __us-east-1__   
-    * Default output format: __can be left blank__    
+      * AWS Access Key ID: __goat account aws_access_key_id__   
+      * AWS Secret Access Key: __goat aws_secret_access_key__   
+      * Default region name: __us-east-1__   
+      * Default output format: __can be left blank__    
     
 
 ## iam_privesc_by_rollback
