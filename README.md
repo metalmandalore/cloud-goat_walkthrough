@@ -228,11 +228,11 @@ cat cardholder/card
 ```
 
 ### Remove cloud_breach_s3
-1. Remove the cardholder folder
+1. Remove the cardholder folder   
 `rm -rf cardholder`  
-2. Remove the scenario
-`./cloudgoat destroy cloud_breach_s3`
-3. Remove AWS CLI Credentials for wrole
+2. Remove the scenario  
+`./cloudgoat destroy cloud_breach_s3`  
+3. Remove AWS CLI Credentials for wrole  
 
 
 ## ec2_ssrf
