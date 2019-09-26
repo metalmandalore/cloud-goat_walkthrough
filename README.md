@@ -115,21 +115,21 @@ Then `:wq` to write and quit
 `./cloudgoat.py create iam_privesc_by_attachment --profile goat`  
 2. Document all Outputs information  
 3. Create user profile
-`aws configure --profile kerrigan`
+`aws configure --profile kerrigan`   
     * AWS Access Key ID: __kerrigan account aws_access_key_id__   
     * AWS Secret Access Key: __kerrigan aws_secret_access_key__   
     * Default region name: __us-east-1__   
     * Default output format: __leave blank__ 
-4. View the EC2 instances  
-`aws ec2 describe-instances --profile kerrigan`
-5. Document the information concerning the image with the Tag containing "super-critical-security-server EC2 Instance"
-There's only one instance listed, so this is simple
-6. Attempt to stop-instances or terminate-instances 
+4. View the EC2 instances   
+`aws ec2 describe-instances --profile kerrigan`   
+5. Document the information concerning the image with the Tag containing "super-critical-security-server EC2 Instance"   
+There's only one instance listed, so this is simple   
+6. Attempt to stop-instances or terminate-instances   
 `aws ec2 stop-instances --instance-ids <instanceID> --region us-east-1 --profile kerrigan`   
 `aws ec2 terminate-instances --instance-ids <instanceID> --region us-east-1 --profile kerrigan`   
 Since this isn't authorized with this profile an alternate route must be explored   
-7. Enumerate instance profiles  
-`aws iam list-instance-profiles --profile kerrigan`  
+7. Enumerate instance profiles   
+`aws iam list-instance-profiles --profile kerrigan`   
 Two of these instance profiles appear to contain AWS access key IDs different than kerrigan's  
 8. Enumerate roles  
 `aws iam list-roles --profile kerrigan`  
@@ -310,16 +310,19 @@ cat outfile
 ```
 **Goal Achieved**
 
-### Remove c2_ssrf 
-1. Remove the outfile created by executing the lambda function
+### Remove ec2_ssrf 
+1. Remove all of the files copied or created locally
 `rm outfile`   
+`rm admin-user.txt`
 2. Removed the scenario   
-`cloudgoat.py destroy c2_ssrf --profile goat`   
+`cloudgoat.py destroy ec2_ssrf --profile goat`   
 3. Remove the additional aws profiles: solus, ec2, cg, admin   
 
 ## rce_web_app
+**Scenario Goal: Find a secret stored in the RDS database**
 1. Create scenario   
 `./cloudgoat.py create rce_web_app --profile goat`   
+2. 
 
 
 ## codebuild_secrets
