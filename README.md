@@ -459,7 +459,7 @@ Access Denied
 7. Obtain more information concerning the project listed   
 `aws codebuild batch-get-projects --names <project-name> --profile solo`   
 Hello Calrission Credentials!  
-Find out what else solo can do before moving on and solving this again as Lando   
+Find out what else solo can do before moving on and solving this again as Lando 
 8. Since codebuilds are in use, perhaps some automation is as well. Attempt to list ssm parameters  
 `aws ssm describe-parameters --profile solo`
 9. Access the private key parameter     
@@ -485,16 +485,10 @@ DB Credentials Obtained!
 
 **Goal Achieved as Solo**
 
-### Solve codebuild_secrets as Lando Calrission
-1. Configure AWS CLI profile for Lando    
-`aws configure --profile lando` 
-2. Access RDS database instance information    
-`aws rds describe-db-instances --profile lando`    
-The DB instance appears to not be publically accessible since that value is false   
-3. Attempt to snapshot the database    
-`aws rds create-db-snapshot --db-instance-identifier <DBinstanceID> --db-snapshot-identifier cloudgoat --profile lando`  
-4. Modify the instance   
-
 
 ### Remove all data for codebuild_secrets
-1. 
+1. Remove ssh key    
+`rm -rf ssh_key`
+2. Remove scenario   
+`cloudgoat.py destroy codebuild_secrets --profile goat`
+3. Remove added profiles
