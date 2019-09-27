@@ -162,6 +162,7 @@ Further inspection if the Group Names are to be believed, one is for http, and t
 `aws iam get-policy-version --policy-arn <mightArn> --version-id v1`   
 19. Now that the new instance contains full admin access the targe instance can be terminated from it   
 `aws ec2 terminate-instances --instance-ids <targetInstanceID> --region us-east-1`   
+
 **Goal Achieved**
 
 ### Remove iam_privesc_by_attachment
@@ -222,7 +223,8 @@ Success!
 That didn't work, maybe we can sync?   
 14. Sync the bucket with a local folder   
 `aws s3 sync s3://<bucket> ./cardholder --profile wrole`  
-**Goal Achieved**
+
+**Goal Achieved**  
 15. Review the new folder for creepy fake PII information     
 ```bash
 ls -la cardholder
@@ -309,7 +311,8 @@ So far so good
 ```bash
 ls -la 
 cat outfile
-```
+```   
+
 **Goal Achieved**
 
 ### Remove ec2_ssrf 
@@ -377,6 +380,7 @@ This appears to be a bash_history file with credentials in it
  `\dt`  
  20. Read the sensitive information    
  `select * from sensitive_information;`    
+ 
  **Goal Achieved as Lara** 
 
 #### Remove rce_web_app Lara data
@@ -423,11 +427,12 @@ This appears to be a bash_history file with credentials in it
  `\dt`  
  20. Read the sensitive information    
  `select * from sensitive_information;`    
+ 
  **Goal Achieved as McDuck**   
  
  ### Remove rce_web_app McDuck data
  1. Exit the AWS system
- 2. Remove downloaded files
+ 2. Remove downloaded files    
  `rm -rf cloudgoat`     
  `rm cloudgoat.pub`   
  3. Remove the McDuck AWS CLI profile
