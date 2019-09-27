@@ -490,5 +490,5 @@ DB Credentials Obtained!
 1. Remove ssh key    
 `rm -rf ssh_key`
 2. Remove scenario   
-`cloudgoat.py destroy codebuild_secrets --profile goat`
+`./cloudgoat.py destroy codebuild_secrets --profile goat`
 3. Remove added profiles
