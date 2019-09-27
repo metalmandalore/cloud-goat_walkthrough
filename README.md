@@ -98,6 +98,7 @@ This demonstrates administrative privileges by allowed all actions to be perform
 10. Verify account authorization details are administrative   
 `aws iam get-account-authorization-details --profile raynor`   
 This list will be a bit accessive as the account now has all possible privileges   
+
 **Goal Achieved**
 
 ### Remove iam_privesc_by_rollback
