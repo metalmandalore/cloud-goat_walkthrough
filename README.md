@@ -185,7 +185,7 @@ Further inspection if the Group Names are to be believed, one is for http, and t
 `./cloudgoat.py create cloud_breach_s3 --profile goat`  
 2. Document the Output information, which only include an account id and an ec2 server address   
 3. Submit a curl request to the EC2 IP   
-`curl -sv http://<ec2IP>`
+`curl -sv http://<ec2IP>`    
 This contains an H1 header stating the server is configured to proxy requests to the EC2 metadata service. It even contains instruction requred to successfully submit a request.  
 The IP 169.254.169.254 is a link-local address used for retrieving metadata. It is meant to be used from an instance to retrieve metadata for that instance. Let's use that as our modified header and see what happens.
 4. Submit a metadata curl request   
