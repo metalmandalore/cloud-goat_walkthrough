@@ -488,12 +488,13 @@ DB Credentials Obtained!
 ### Solve codebuild_secrets as Lando Calrission
 1. Configure AWS CLI profile for Lando    
 `aws configure --profile lando` 
-2. Access RDS database instance information
-`aws rds describe-db-instances --profile lando`
-The DB instance appears to not be publically accessible since that value is false  
-3. Attempt to snapshot the database
+2. Access RDS database instance information    
+`aws rds describe-db-instances --profile lando`    
+The DB instance appears to not be publically accessible since that value is false   
+3. Attempt to snapshot the database    
 `aws rds create-db-snapshot --db-instance-identifier <DBinstanceID> --db-snapshot-identifier cloudgoat --profile lando`  
-4. Modify the instance
+4. Modify the instance   
 
-### Remove all data for Han & Lando
+
+### Remove all data for codebuild_secrets
 1. 
