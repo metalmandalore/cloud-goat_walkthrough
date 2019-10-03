@@ -344,7 +344,7 @@ Lara only has access to the log file bucket
 `aws s3 cp s3://<S3LogBucket>/dir/file.log ./ --profile lara`
 5. Review the log file  
 `cat file.log`  
-This log file shows an app GET a load-balancer, which is unreacheable from curl
+This log file shows an app GET a load-balancer, which is unreachable from curl
 6. List load balancers    
 `aws elbv2 describe-load-balancers --profile lara`
 7. Copy the DNSName and paste it in a browser window    
