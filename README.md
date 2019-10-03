@@ -250,7 +250,7 @@ cat cardholder/card
     * AWS Secret Access Key: __solus aws_secret_access_key__   
     * Default region name: __us-east-1__   
     * Default output format: __leave blank__  
-3.  Attempt to list the lamda functions   
+3.  Attempt to list the lambda functions   
 `aws lambda list-functions --profile solus`   
 The listed function contains a service role as well as an ec2 access key id and secret key id   
 4. Create a new profile called ec2 with the discovered credentials     
