@@ -160,7 +160,7 @@ Further inspection if the Group Names are to be believed, one is for http, and t
 `sudo apt-get update && apt install awscli`
 18. Look at the permissions of the mighty policy   
 `aws iam get-policy-version --policy-arn <mightArn> --version-id v1`   
-19. Now that the new instance contains full admin access the targe instance can be terminated from it   
+19. Now that the new instance contains full admin access the target instance can be terminated from it   
 `aws ec2 terminate-instances --instance-ids <targetInstanceID> --region us-east-1`   
 
 **Goal Achieved**
