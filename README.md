@@ -438,7 +438,7 @@ This appears to be a bash_history file with credentials in it
  
   ### Alternative Variance
  There are several walkthroughs out there for different paths that can be taken by both Lara and McDuck. 
- This walkthrough only covers what is commonly reffered to as "living off of the land".     
+ This walkthrough only covers what is commonly referred to as "living off of the land".     
  Alternative walkthroughs involve downloading awscli from the AWS system after SSHing in.
  
 ## codebuild_secrets
