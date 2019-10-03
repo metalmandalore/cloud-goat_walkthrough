@@ -326,7 +326,7 @@ cat outfile
 **Scenario Goal: Find a secret stored in the RDS database**
 1. Create scenario   
 `./cloudgoat.py create rce_web_app --profile goat`   
-2. This sceanrio kind of has 2 goals, and that is to find the secret in the database as each user. Continue through save the Outputs and continue through, 1st as **lara**, then as **mcduck**    
+2. This scenario kind of has 2 goals, and that is to find the secret in the database as each user. Continue through save the Outputs and continue through, 1st as **lara**, then as **mcduck**    
 
 ### rce_web_app as Lara
 1. Create an AWS CLI profile for Lara
