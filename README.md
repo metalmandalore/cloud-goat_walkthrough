@@ -402,7 +402,7 @@ This appears to be a bash_history file with credentials in it
     * Default output format: __leave blank__   
 2. Look for information at S3 bucket storage   
 `aws s3 ls --profile mcduck`   
-3. Recursively look thorugh the S3 buckets    
+3. Recursively list the S3 buckets    
 `aws s3 ls s3://<S3bucket> --recursive --ducky`
 4. Copy the two interesting findings in the keystore bucket to your local directory   
 `aws s3 cp s3://<S3bucket>/cloudgoat . --profile mcduck`    
