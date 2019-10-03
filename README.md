@@ -329,7 +329,7 @@ cat outfile
 2. This scenario kind of has 2 goals, and that is to find the secret in the database as each user. Continue through save the Outputs and continue through, 1st as **lara**, then as **mcduck**    
 
 ### rce_web_app as Lara
-1. Create an AWS CLI profile for Lara
+1. Create an AWS CLI profile for Lara    
 `aws configure --profile lara`   
     * AWS Access Key ID: __lara aws_access_key_id__   
     * AWS Secret Access Key: __lara aws_secret_access_key__   
