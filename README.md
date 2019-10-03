@@ -285,7 +285,7 @@ Result is the portion of a page called "sethsec's SSRF demo"
 `aws_session_token = <token>`ESC  
 `:wq` Enter   
 13. Attempt enumeration of the new profile permissions     
-The cg profile doesn't appear to have permmissions for viewing lambda/ec2/iam resources    
+The cg profile doesn't appear to have permissions for viewing lambda/ec2/iam resources    
 14. Attempt to list S3 buckets   
 `aws s3 ls --profile cg`   
 15. Look for useful information in the secret bucket    
