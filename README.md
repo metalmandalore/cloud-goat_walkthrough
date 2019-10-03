@@ -353,7 +353,7 @@ This results in a website that mentions it's members are sent a **secret URL**
 Close examination shows a site.html at the end of one of the 1st GET requests
 9. Copy the URI and paste it to the end of the DNSName in the browser  
 10. Navigating to that page reveals personalized login command, which specifically states "do not enter any other commands"   That's a good indication that it doesn't appropriately filter user input
-11. Test injection susceptability with a single quote    
+11. Test injection susceptibility with a single quote    
 `'`    
 Oh nos, This "Gold-Star" executive user signup site appear to allow users to execute bash commands
 12. Test bash commands
