@@ -337,7 +337,7 @@ cat outfile
     * Default output format: __leave blank__   
 2. Look for information at S3 bucket storage   
 `aws s3 ls --profile lara`
-3. Recursively look thorugh the S3 buckets
+3. Recursively list the S3 buckets
 `aws s3 ls s3://<S3bucket> --recursive --profile lara`   
 Lara only has access to the log file bucket
 4. Copy the log file    
