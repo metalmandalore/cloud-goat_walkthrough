@@ -97,7 +97,7 @@ This demonstrates administrative privileges by allowed all actions to be perform
 `aws iam set-default-policy-version --policy-arn arn:aws:iam:666999666999:policy/cg-raynor-policy --version-id v3 --profile Raynor`     
 10. Verify account authorization details are administrative   
 `aws iam get-account-authorization-details --profile raynor`   
-This list will be a bit accessive as the account now has all possible privileges   
+This list will be a bit excessive as the account now has all possible privileges   
 
 **Goal Achieved**
 
