@@ -93,7 +93,7 @@ e.g.
 `aws iam get-policy-version --policy-arn arn:aws:iam:666999666999:policy/cg-raynor-policy --version-id v1 --profile raynor`
 8. Document the policy version which contains __Allowed Actions: *__ and __Resource: *__   
 This demonstrates administrative privileges by allowed all actions to be performed on all resources     
-9. Set the default policy version to the one containing admin privileges  
+9. Set the default policy version to the one containing admin privileges, but note the following example is not the version with admin privileges  
 `aws iam set-default-policy-version --policy-arn arn:aws:iam:666999666999:policy/cg-raynor-policy --version-id v3 --profile raynor`     
 10. Verify account authorization details are administrative   
 `aws iam get-account-authorization-details --profile raynor`   
